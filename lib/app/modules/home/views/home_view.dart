@@ -5,6 +5,7 @@ import '../controllers/home_controller.dart';
 import '../../category/views/category_view.dart';
 import '../../product/views/product_list_view.dart';
 import '../../customer/views/customer_list_view.dart';
+import '../../party_menu/views/party_menu_view.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -58,6 +59,12 @@ class HomeView extends GetView<HomeController> {
                   2, 
                   () => controller.changeIndex(2)
                 )),
+                Obx(() => _buildSidebarItem(
+                  Icons.party_mode_outlined, 
+                  "Party Menu", 
+                  5, 
+                  () => controller.changeIndex(5)
+                )),
                 const Spacer(),
                 _buildSidebarItem(
                   Icons.logout, 
@@ -89,6 +96,8 @@ class HomeView extends GetView<HomeController> {
                   return const ProductView();
                 case 4:
                   return const CustomerListView();
+                case 5:
+                  return const PartyMenuView();
                 default:
                   return const Center(child: Text("Page not found"));
               }
