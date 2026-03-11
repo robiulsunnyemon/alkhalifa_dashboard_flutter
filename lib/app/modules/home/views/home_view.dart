@@ -8,6 +8,7 @@ import '../../customer/views/customer_list_view.dart';
 import '../../party_menu/views/party_menu_view.dart';
 import '../../delivery_area/views/delivery_area_view.dart';
 import '../../delivery_fee/views/delivery_fee_view.dart';
+import '../../order_management/views/order_management_view.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -67,6 +68,12 @@ class HomeView extends GetView<HomeController> {
                   5, 
                   () => controller.changeIndex(5)
                 )),
+                Obx(() => _buildSidebarItem(
+                  Icons.shopping_bag_outlined, 
+                  "Orders", 
+                  8, 
+                  () => controller.changeIndex(8)
+                )),
                 Theme(
                   data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                   child: ExpansionTile(
@@ -125,6 +132,8 @@ class HomeView extends GetView<HomeController> {
                   return const DeliveryAreaView();
                 case 7:
                   return const DeliveryFeeView();
+                case 8:
+                  return const OrderManagementView();
                 default:
                   return const Center(child: Text("Page not found"));
               }
