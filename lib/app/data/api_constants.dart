@@ -9,4 +9,5 @@ class ApiConstants {
   static const String customers = "$baseUrl/user/customers";
   static const String partyMenu = "$baseUrl/party-menu";
   static const String deliveryAreas = "$baseUrl/delivery-areas";
+  static const String deliveryFee = "$baseUrl/delivery-fee";
 }
