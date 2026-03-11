@@ -6,6 +6,7 @@ import '../../category/views/category_view.dart';
 import '../../product/views/product_list_view.dart';
 import '../../customer/views/customer_list_view.dart';
 import '../../party_menu/views/party_menu_view.dart';
+import '../../delivery_area/views/delivery_area_view.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -65,6 +66,21 @@ class HomeView extends GetView<HomeController> {
                   5, 
                   () => controller.changeIndex(5)
                 )),
+                Theme(
+                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  child: ExpansionTile(
+                    leading: const Icon(Icons.settings, color: Colors.grey),
+                    title: const Text('System Config', style: TextStyle(color: Colors.black87)),
+                    children: [
+                      Obx(() => _buildSidebarItem(
+                        Icons.map, 
+                        "Delivery Areas", 
+                        6, 
+                        () => controller.changeIndex(6)
+                      )),
+                    ],
+                  ),
+                ),
                 const Spacer(),
                 _buildSidebarItem(
                   Icons.logout, 
@@ -98,6 +114,8 @@ class HomeView extends GetView<HomeController> {
                   return const CustomerListView();
                 case 5:
                   return const PartyMenuView();
+                case 6:
+                  return const DeliveryAreaView();
                 default:
                   return const Center(child: Text("Page not found"));
               }
