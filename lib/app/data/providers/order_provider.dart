@@ -18,12 +18,10 @@ class OrderProvider {
 
   Future<http.Response> updateOrderStatus(int orderId, String status) async {
     return await http.put(
-      Uri.parse('$baseUrl/$orderId/status'),
+      Uri.parse('$baseUrl/$orderId/status?status=$status'),
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': 'Bearer $_token',
       },
-      body: '"$status"', // status is a simple string for the status enum if passed as JSON body
     );
   }
 

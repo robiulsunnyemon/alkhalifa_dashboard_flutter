@@ -7,7 +7,9 @@ class OrderManagementController extends GetxController {
   final OrderProvider _provider = OrderProvider();
   
   var orders = [].obs;
+  var filteredOrders = [].obs;
   var isLoading = false.obs;
+  var selectedStatus = "ALL".obs;
 
   @override
   void onInit() {
@@ -21,11 +23,21 @@ class OrderManagementController extends GetxController {
       final response = await _provider.getAllOrders();
       if (response.statusCode == 200) {
         orders.value = jsonDecode(response.body);
+        filterOrders(selectedStatus.value);
       }
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch orders', backgroundColor: Colors.red, colorText: Colors.white);
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void filterOrders(String status) {
+    selectedStatus.value = status;
+    if (status == "ALL") {
+      filteredOrders.value = orders;
+    } else {
+      filteredOrders.value = orders.where((order) => order['status'] == status).toList();
     }
   }
 

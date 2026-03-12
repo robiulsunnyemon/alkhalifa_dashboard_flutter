@@ -17,23 +17,41 @@ class OrderManagementView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Order Management',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Order Management',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Obx(() => Row(
+                  children: [
+                    _buildFilterChip("ALL", controller),
+                    const SizedBox(width: 8),
+                    _buildFilterChip("PENDING", controller),
+                    const SizedBox(width: 8),
+                    _buildFilterChip("CONFIRMED", controller),
+                    const SizedBox(width: 8),
+                    _buildFilterChip("DELIVERED", controller),
+                    const SizedBox(width: 8),
+                    _buildFilterChip("CANCELLED", controller),
+                  ],
+                )),
+              ],
             ),
             const SizedBox(height: 24),
             Expanded(
               child: Obx(() {
-                if (controller.isLoading.value && controller.orders.isEmpty) {
+                if (controller.isLoading.value && controller.filteredOrders.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (controller.orders.isEmpty) {
-                  return const Center(child: Text("No orders found."));
+                if (controller.filteredOrders.isEmpty) {
+                  return const Center(child: Text("No orders found for this status."));
                 }
                 return ListView.builder(
-                  itemCount: controller.orders.length,
+                  itemCount: controller.filteredOrders.length,
                   itemBuilder: (context, index) {
-                    final order = controller.orders[index];
+                    final order = controller.filteredOrders[index];
                     return _buildOrderCard(order, controller);
                   },
                 );
@@ -157,6 +175,22 @@ class OrderManagementView extends StatelessWidget {
           Expanded(child: Text(value, style: const TextStyle(fontSize: 13))),
         ],
       ),
+    );
+  }
+
+  Widget _buildFilterChip(String status, OrderManagementController controller) {
+    final isSelected = controller.selectedStatus.value == status;
+    return ChoiceChip(
+      label: Text(status, style: TextStyle(color: isSelected ? Colors.white : Colors.black87, fontSize: 12)),
+      selected: isSelected,
+      onSelected: (selected) {
+        if (selected) controller.filterOrders(status);
+      },
+      selectedColor: const Color(0xFF00B14F),
+      backgroundColor: Colors.grey[100],
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      side: BorderSide(color: isSelected ? Colors.transparent : Colors.grey[300]!),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
     );
   }
 
