@@ -32,6 +32,10 @@ class OrderManagementView extends StatelessWidget {
                     const SizedBox(width: 8),
                     _buildFilterChip("CONFIRMED", controller),
                     const SizedBox(width: 8),
+                    _buildFilterChip("PROCESSING", controller),
+                    const SizedBox(width: 8),
+                    _buildFilterChip("SHIPPED", controller),
+                    const SizedBox(width: 8),
                     _buildFilterChip("DELIVERED", controller),
                     const SizedBox(width: 8),
                     _buildFilterChip("CANCELLED", controller),
@@ -145,11 +149,18 @@ class OrderManagementView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    _buildStatusButton(order['id'], "CONFIRMED", Colors.blue, controller),
-                    const SizedBox(width: 8),
-                    _buildStatusButton(order['id'], "DELIVERED", Colors.green, controller),
-                    const SizedBox(width: 8),
-                    _buildStatusButton(order['id'], "CANCELLED", Colors.red, controller),
+                    if (order['status'] == 'PENDING')
+                      _buildStatusButton(order['id'], "CONFIRMED", Colors.blue, controller),
+                    if (order['status'] == 'CONFIRMED')
+                      _buildStatusButton(order['id'], "PROCESSING", Colors.indigo, controller),
+                    if (order['status'] == 'PROCESSING')
+                      _buildStatusButton(order['id'], "SHIPPED", Colors.purple, controller),
+                    if (order['status'] == 'SHIPPED')
+                      _buildStatusButton(order['id'], "DELIVERED", Colors.green, controller),
+                    if (order['status'] != 'DELIVERED' && order['status'] != 'CANCELLED') ...[
+                      const SizedBox(width: 8),
+                      _buildStatusButton(order['id'], "CANCELLED", Colors.red, controller),
+                    ],
                     const SizedBox(width: 16),
                     IconButton(
                       icon: const Icon(Icons.delete, color: Colors.grey),
