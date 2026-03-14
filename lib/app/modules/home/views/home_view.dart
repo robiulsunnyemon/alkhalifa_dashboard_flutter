@@ -11,6 +11,7 @@ import '../../delivery_fee/views/delivery_fee_view.dart';
 import '../../order_management/views/order_management_view.dart';
 import '../../payments/views/payments_view.dart';
 import 'dashboard_content_view.dart';
+import 'slider_management_view.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -101,6 +102,12 @@ class HomeView extends GetView<HomeController> {
                         7, 
                         () => controller.changeIndex(7)
                       )),
+                      Obx(() => _buildSidebarItem(
+                        Icons.slideshow, 
+                        "Slider Management", 
+                        10, 
+                        () => controller.changeIndex(10)
+                      )),
                     ],
                   ),
                 ),
@@ -140,6 +147,8 @@ class HomeView extends GetView<HomeController> {
                   return const OrderManagementView();
                 case 9:
                   return const PaymentsView();
+                case 10:
+                  return const SliderManagementView();
                 default:
                   return const Center(child: Text("Page not found"));
               }

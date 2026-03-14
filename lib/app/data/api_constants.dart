@@ -13,4 +13,5 @@ class ApiConstants {
   static const String orders = "$baseUrl/orders";
   static const String payments = "$baseUrl/payments";
   static const String dashboard = "$baseUrl/dashboard";
+  static const String sliders = "$baseUrl/sliders/";
 }
