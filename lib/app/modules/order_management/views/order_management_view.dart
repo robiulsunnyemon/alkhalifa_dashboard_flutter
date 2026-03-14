@@ -73,13 +73,15 @@ class OrderManagementView extends StatelessWidget {
     final formattedDate = DateFormat('dd MMM yyyy, hh:mm a').format(date);
 
     return Card(
-      elevation: 0,
+      elevation:0,
+      color: Colors.white,
       margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(color: Colors.grey[200]!),
       ),
       child: ExpansionTile(
+        shape: const Border(),
         title: Row(
           children: [
             Text("Order #${order['id']}", style: const TextStyle(fontWeight: FontWeight.bold)),

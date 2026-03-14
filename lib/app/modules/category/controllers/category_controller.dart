@@ -29,6 +29,7 @@ class CategoryController extends GetxController {
     try {
       isLoading.value = true;
       final response = await _provider.getCategories();
+      print("fetch categories: body ${response.body},, statuscode: ${response.statusCode}");
       if (response.statusCode == 200) {
         categories.value = jsonDecode(response.body);
       }

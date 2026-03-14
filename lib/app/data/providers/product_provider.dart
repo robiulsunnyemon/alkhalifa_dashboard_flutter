@@ -27,7 +27,7 @@ class ProductProvider {
 
   Future<http.Response> updateProduct(int id, Map<String, dynamic> productData) async {
     return await http.put(
-      Uri.parse("${ApiConstants.products}/$id"),
+      Uri.parse("${ApiConstants.products}$id"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $_token",
@@ -38,7 +38,7 @@ class ProductProvider {
 
   Future<http.Response> deleteProduct(int id) async {
     return await http.delete(
-      Uri.parse("${ApiConstants.products}/$id"),
+      Uri.parse("${ApiConstants.products}$id"),
       headers: {
         "Authorization": "Bearer $_token",
       },

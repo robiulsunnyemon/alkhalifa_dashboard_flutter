@@ -24,6 +24,7 @@ class ProductListController extends GetxController {
     try {
       isLoading.value = true;
       final response = await _provider.getProducts(page: currentPage.value, size: pageSize);
+      print("fetch products: body ${response.body},, statuscode: ${response.statusCode}");
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         products.value = data['items'];
