@@ -29,8 +29,8 @@ class LoginView extends GetView<LoginController> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.network(
-                "https://res.cloudinary.com/dummy/image/upload/v1/logo.png", // Placeholder
+              Image.asset(
+                "assets/img/logo.png", // Placeholder
                 height: 80,
                 errorBuilder: (context, error, stackTrace) => const Icon(Icons.restaurant_menu, size: 80, color: Color(0xFF00B14F)),
               ),

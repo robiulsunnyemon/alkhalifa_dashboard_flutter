@@ -1,0 +1,12 @@
+﻿Analyzing home...                                               
+
+  error - Target of URI doesn't exist: '../../data/providers/dashboard_provider.dart' - lib\app\modules\home\controllers\home_controller.dart:3:8 - uri_does_not_exist
+  error - Undefined class 'DashboardProvider' - lib\app\modules\home\controllers\home_controller.dart:22:9 - undefined_class
+  error - The method 'DashboardProvider' isn't defined for the type 'HomeController' - lib\app\modules\home\controllers\home_controller.dart:22:48 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\app\modules\home\views\dashboard_content_view.dart:87:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\app\modules\home\views\dashboard_content_view.dart:90:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\app\modules\home\views\dashboard_content_view.dart:117:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\app\modules\home\views\dashboard_content_view.dart:120:32 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\app\modules\home\views\home_view.dart:30:38 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\app\modules\home\views\home_view.dart:167:50 - deprecated_member_use
+

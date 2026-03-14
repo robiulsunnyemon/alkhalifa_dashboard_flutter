@@ -10,6 +10,7 @@ import '../../delivery_area/views/delivery_area_view.dart';
 import '../../delivery_fee/views/delivery_fee_view.dart';
 import '../../order_management/views/order_management_view.dart';
 import '../../payments/views/payments_view.dart';
+import 'dashboard_content_view.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -17,6 +18,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Row(
         children: [
           // Sidebar
@@ -34,9 +36,9 @@ class HomeView extends GetView<HomeController> {
             ),
             child: Column(
               children: [
-                const DrawerHeader(
+                 DrawerHeader(
                   child: Center(
-                    child: Icon(Icons.restaurant_menu, size: 64, color: Color(0xFF00B14F)),
+                    child: Image.asset("assets/img/logo.png"),
                   ),
                 ),
                 Obx(() => _buildSidebarItem(
@@ -119,12 +121,7 @@ class HomeView extends GetView<HomeController> {
             child: Obx(() {
               switch (controller.selectedIndex.value) {
                 case 0:
-                  return const Center(
-                    child: Text(
-                      'Welcome to Dashboard',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                  );
+                  return const DashboardContentView();
                 case 1:
                   return const CategoryView();
                 case 2:
@@ -157,7 +154,7 @@ class HomeView extends GetView<HomeController> {
     final isSelected = controller.selectedIndex.value == index;
     return ListTile(
       leading: Icon(
-        icon, 
+        icon,
         color: isSelected ? const Color(0xFF00B14F) : Colors.grey[600]
       ),
       title: Text(
