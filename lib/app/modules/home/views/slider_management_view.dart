@@ -14,15 +14,16 @@ class SliderManagementView extends GetView<SliderController> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Slider Management', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
+        foregroundColor: Colors.white,
+        title: const Text('Slider Management'),
+        backgroundColor: Colors.green,
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.add, color: Color(0xFF00B14F)),
+            icon: const Icon(Icons.add),
             onPressed: () => _showAddSliderDialog(context),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 80),
         ],
       ),
       body: Obx(() {

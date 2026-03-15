@@ -13,6 +13,8 @@ import '../../order_management/views/order_management_view.dart';
 import '../../payments/views/payments_view.dart';
 import 'dashboard_content_view.dart';
 import 'slider_management_view.dart';
+import '../../section_management/views/section_management_view.dart';
+import '../../section_management/bindings/section_management_binding.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -110,6 +112,12 @@ class HomeView extends GetView<HomeController> {
                         () => controller.changeIndex(10)
                       )),
                       Obx(() => _buildSidebarItem(
+                        Icons.view_quilt_outlined, 
+                        "Product Sections", 
+                        12, 
+                        () => controller.changeIndex(12)
+                      )),
+                      Obx(() => _buildSidebarItem(
                         Icons.settings_applications_outlined, 
                         "General Settings", 
                         11, 
@@ -158,6 +166,8 @@ class HomeView extends GetView<HomeController> {
                   return const SliderManagementView();
                 case 11:
                   return const SettingsView();
+                case 12:
+                  return const SectionManagementView();
                 default:
                   return const Center(child: Text("Page not found"));
               }

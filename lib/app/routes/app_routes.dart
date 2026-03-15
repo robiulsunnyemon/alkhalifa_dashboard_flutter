@@ -19,4 +19,5 @@ abstract class _Paths {
   static const PRODUCT_LIST = '/product-list';
   static const PRODUCT_ADD = '/product-add';
   static const SETTINGS = '/settings';
+  static const SECTION_MANAGEMENT = '/section-management';
 }
