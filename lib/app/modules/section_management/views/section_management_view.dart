@@ -30,8 +30,10 @@ class SectionManagementView extends GetView<SectionManagementController> {
           itemBuilder: (context, index) {
             final section = controller.sections[index];
             return Card(
+              color: Colors.grey.shade100,
               margin: const EdgeInsets.all(8),
               child: ExpansionTile(
+                shape: const Border(),
                 title: Text(section['name']),
                 subtitle: Text('Order: ${section['order_index']}'),
                 leading: Switch(
