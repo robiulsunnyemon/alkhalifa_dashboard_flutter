@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 import '../modules/category/bindings/category_binding.dart';
 import '../modules/category/views/category_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -7,7 +9,9 @@ import '../modules/login/views/login_view.dart';
 import '../modules/product/bindings/product_binding.dart';
 import '../modules/product/views/product_list_view.dart';
 import '../modules/product/views/product_view.dart';
-import 'package:get/get.dart';
+import '../modules/settings/bindings/settings_binding.dart';
+import '../modules/settings/views/settings_view.dart';
+
 part 'app_routes.dart';
 
 class AppPages {
@@ -23,6 +27,7 @@ class AppPages {
         HomeBinding(),
         CategoryBinding(),
         ProductBinding(),
+        SettingsBinding(),
       ],
     ),
     GetPage(
@@ -44,6 +49,11 @@ class AppPages {
       name: _Paths.PRODUCT_ADD,
       page: () => const ProductView(),
       binding: ProductBinding(),
+    ),
+    GetPage(
+      name: _Paths.SETTINGS,
+      page: () => const SettingsView(),
+      binding: SettingsBinding(),
     ),
   ];
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../product/views/product_view.dart';
+import '../../settings/views/settings_view.dart';
 import '../controllers/home_controller.dart';
 import '../../category/views/category_view.dart';
 import '../../product/views/product_list_view.dart';
@@ -108,6 +109,12 @@ class HomeView extends GetView<HomeController> {
                         10, 
                         () => controller.changeIndex(10)
                       )),
+                      Obx(() => _buildSidebarItem(
+                        Icons.settings_applications_outlined, 
+                        "General Settings", 
+                        11, 
+                        () => controller.changeIndex(11)
+                      )),
                     ],
                   ),
                 ),
@@ -149,6 +156,8 @@ class HomeView extends GetView<HomeController> {
                   return const PaymentsView();
                 case 10:
                   return const SliderManagementView();
+                case 11:
+                  return const SettingsView();
                 default:
                   return const Center(child: Text("Page not found"));
               }
