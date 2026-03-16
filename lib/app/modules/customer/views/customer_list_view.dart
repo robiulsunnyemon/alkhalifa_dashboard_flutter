@@ -28,11 +28,15 @@ class CustomerListView extends GetView<CustomerListController> {
                 Row(
                   children: [
                     const SizedBox(width: 16),
-                    CircleAvatar(
-                      radius: 18,
-                      backgroundColor: Colors.grey[200],
-                      child: const Icon(Icons.person, color: Colors.grey),
-                    ),
+                    Obx(() {
+                      final profileImg = Get.find<HomeController>().adminProfileImg.value;
+                      return CircleAvatar(
+                        radius: 18,
+                        backgroundColor: Colors.grey[200],
+                        backgroundImage: profileImg.isNotEmpty ? NetworkImage(profileImg) : null,
+                        child: profileImg.isEmpty ? const Icon(Icons.person, color: Colors.grey) : null,
+                      );
+                    }),
                     const SizedBox(width: 8),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
