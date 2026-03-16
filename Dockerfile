@@ -19,13 +19,14 @@ RUN flutter doctor
 WORKDIR /app
 COPY . .
 
-# Build for web
+# Build for web (using / as base-href for Docker/Coolify)
 RUN flutter pub get
-RUN flutter build web --release
+RUN flutter build web --release --base-href "/"
 
 # Stage 2: Serve using Nginx
 FROM nginx:alpine
 COPY --from=build-env /app/build/web /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80
