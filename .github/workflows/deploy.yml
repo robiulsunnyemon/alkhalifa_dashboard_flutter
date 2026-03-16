@@ -3,7 +3,7 @@ name: Deploy Flutter Web
 on:
   push:
     branches:
-      - main  # অথবা আপনার ডিফল্ট ব্রাঞ্চের নাম
+      - main
 
 jobs:
   build:
@@ -15,13 +15,13 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.10.1' # আপনার flutter version অনুযায়ী পরিবর্তন করতে পারেন
+          flutter-version: '3.10.1'
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Build Web
-        run: flutter build web --release --base-href "/YOUR_REPO_NAME/" # GitHub Pages এর জন্য repo name প্রয়োজন
+        run: flutter build web --release --base-href "alkhalifa_dashboard_flutter"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
