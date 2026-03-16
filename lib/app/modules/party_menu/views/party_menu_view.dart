@@ -1,14 +1,453 @@
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import '../../home/controllers/home_controller.dart';
+// import '../controllers/party_menu_controller.dart';
+//
+//
+// class PartyMenuView extends GetView<PartyMenuController> {
+//   const PartyMenuView({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     if (!Get.isRegistered<PartyMenuController>()) {
+//       Get.put(PartyMenuController());
+//     }
+//
+//     return Scaffold(
+//       backgroundColor: const Color(0xFFF9F9F9),
+//       body: Padding(
+//         padding: const EdgeInsets.all(24.0),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             // Header with User Info
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 const SizedBox(), // Spacer
+//                 Row(
+//                   children: [
+//                     const Icon(Icons.notifications_none, color: Colors.black54),
+//                     const SizedBox(width: 16),
+//                     CircleAvatar(
+//                       radius: 18,
+//                       backgroundColor: Colors.grey[200],
+//                       child: const Icon(Icons.person, color: Colors.grey),
+//                     ),
+//                     const SizedBox(width: 8),
+//                     Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Obx(() => Text(
+//                           Get.find<HomeController>().adminName.value,
+//                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+//                         )),
+//                         Obx(() => Text(
+//                           Get.find<HomeController>().adminRole.value,
+//                           style: const TextStyle(color: Colors.grey, fontSize: 11),
+//                         )),
+//                       ],
+//                     ),
+//                     const Icon(Icons.keyboard_arrow_down, size: 20),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//             const SizedBox(height: 32),
+//
+//             // Title and Add Button
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 const Text(
+//                   "Menu Management",
+//                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//                 ),
+//                 ElevatedButton.icon(
+//                   onPressed: () {
+//                     controller.clearForm();
+//                     _showMenuForm(context);
+//                   },
+//                   icon: const Icon(Icons.add, size: 18),
+//                   label: const Text("Add New Menu", style: TextStyle(fontSize: 13)),
+//                   style: ElevatedButton.styleFrom(
+//                     backgroundColor: const Color(0xFF00B14F),
+//                     foregroundColor: Colors.white,
+//                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+//                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//             const SizedBox(height: 24),
+//
+//             // Grid of Party Menus and Pagination
+//             Expanded(
+//               child: Obx(() {
+//                 if (controller.isLoading.value) {
+//                   return const Center(child: CircularProgressIndicator(color: Color(0xFF00B14F)));
+//                 }
+//                 if (controller.partyMenus.isEmpty) {
+//                   return const Center(child: Text("No party menus yet"));
+//                 }
+//                 return CustomScrollView(
+//                   slivers: [
+//                     SliverGrid(
+//                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//                         crossAxisCount: 3,
+//                         crossAxisSpacing: 20,
+//                         mainAxisSpacing: 20,
+//                         childAspectRatio: 0.82,
+//                       ),
+//                       delegate: SliverChildBuilderDelegate(
+//                         (context, index) {
+//                           final menu = controller.partyMenus[index];
+//                           return _buildMenuCard(menu,context);
+//                         },
+//                         childCount: controller.partyMenus.length,
+//                       ),
+//                     ),
+//                     const SliverToBoxAdapter(child: SizedBox(height: 32)),
+//                     SliverToBoxAdapter(
+//                       child: Obx(() => Row(
+//                         children: [
+//                           Text(
+//                             "Showing ${(controller.currentPage.value - 1) * controller.pageSize + 1} to ${(controller.currentPage.value * controller.pageSize).clamp(0, controller.totalItems.value)} of ${controller.totalItems.value} results",
+//                             style: const TextStyle(color: Colors.grey, fontSize: 13),
+//                           ),
+//                           const Spacer(),
+//                           _buildPaginationButton("Previous", () => controller.previousPage()),
+//                           const SizedBox(width: 12),
+//                           _buildPaginationButton("Next", () => controller.nextPage()),
+//                         ],
+//                       )),
+//                     ),
+//                     const SliverToBoxAdapter(child: SizedBox(height: 24)),
+//                   ],
+//                 );
+//               }),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Widget _buildMenuCard(Map<String, dynamic> menu,BuildContext context) {
+//     return Container(
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(12),
+//         boxShadow: [
+//           BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, spreadRadius: 0),
+//         ],
+//       ),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           // Image
+//           ClipRRect(
+//             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+//             child: menu['image_url'] != null && menu['image_url'].toString().isNotEmpty
+//                 ? Image.network(menu['image_url'], height: 220, width: double.infinity, fit: BoxFit.cover)
+//                 : Container(height: 220, color: Colors.grey[200], child: const Icon(Icons.image, color: Colors.grey)),
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.all(16.0),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   menu['title'],
+//                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+//                 ),
+//                 const SizedBox(height: 8),
+//                 Text(
+//                   menu['description'] ?? "No description",
+//                   maxLines: 2,
+//                   overflow: TextOverflow.ellipsis,
+//                   style: TextStyle(color: Colors.grey[600], fontSize: 12),
+//                 ),
+//                 const SizedBox(height: 16),
+//                 Row(
+//                   children: [
+//                     Expanded(
+//                       child: OutlinedButton(
+//                         onPressed: () {
+//                           controller.populateForm(menu);
+//                           _showMenuForm(context);
+//                         },
+//                         style: OutlinedButton.styleFrom(
+//                           side: const BorderSide(color: Color(0xFF00B14F)),
+//                           padding: const EdgeInsets.symmetric(vertical: 12),
+//                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+//                         ),
+//                         child: const Text("Edit", style: TextStyle(color: Color(0xFF00B14F), fontSize: 13)),
+//                       ),
+//                     ),
+//                     const SizedBox(width: 8),
+//                     Expanded(
+//                       child: OutlinedButton(
+//                         onPressed: () => controller.deletePartyMenu(menu['id']),
+//                         style: OutlinedButton.styleFrom(
+//                           side: const BorderSide(color: Colors.red),
+//                           padding: const EdgeInsets.symmetric(vertical: 12),
+//                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+//                         ),
+//                         child: const Text("Delete", style: TextStyle(color: Colors.red, fontSize: 13)),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   void _showMenuForm(BuildContext context) {
+//     Get.dialog(
+//       Dialog(
+//         backgroundColor: Colors.white,
+//         insetPadding: const EdgeInsets.all(40),
+//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+//         child: Container(
+//           width: 800,
+//           padding: const EdgeInsets.all(32),
+//           child: SingleChildScrollView(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     Obx(() => Text(
+//                       controller.isEditing.value ? "Update Party Menu" : "Add New Menu",
+//                       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+//                     )),
+//                     IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.close)),
+//                   ],
+//                 ),
+//                 const SizedBox(height: 24),
+//
+//                 // Image Placeholder/Upload
+//                 Obx(() => GestureDetector(
+//                   onTap: () => controller.pickAndUploadImage(),
+//                   child: Container(
+//                     height: 200,
+//                     width: double.infinity,
+//                     decoration: BoxDecoration(
+//                       color: Colors.grey[100],
+//                       borderRadius: BorderRadius.circular(12),
+//                       border: Border.all(color: Colors.grey[300]!, width: 1),
+//                       image: controller.selectedImageUrl.value.isNotEmpty
+//                           ? DecorationImage(
+//                               image: NetworkImage(controller.selectedImageUrl.value),
+//                               fit: BoxFit.cover,
+//                             )
+//                           : null,
+//                     ),
+//                     child: controller.isUploading.value
+//                         ? const Center(child: CircularProgressIndicator(color: Color(0xFF00B14F)))
+//                         : controller.selectedImageUrl.value.isEmpty
+//                             ? const Center(
+//                                 child: Column(
+//                                   mainAxisAlignment: MainAxisAlignment.center,
+//                                   children: [
+//                                     Icon(Icons.image_outlined, size: 48, color: Colors.grey),
+//                                     SizedBox(height: 8),
+//                                     Text("Add Photos", style: TextStyle(color: Colors.grey)),
+//                                   ],
+//                                 ),
+//                               )
+//                             : null,
+//                   ),
+//                 )),
+//                 const SizedBox(height: 24),
+//
+//                 // Form Fields Row 1
+//                 Row(
+//                   children: [
+//                     Expanded(
+//                       child: _buildFormField("Title", controller.titleController, "Enter title"),
+//                     ),
+//                     const SizedBox(width: 16),
+//                     Expanded(
+//                       child: _buildFormField("Price", controller.priceController, "Enter price"),
+//                     ),
+//                   ],
+//                 ),
+//                 const SizedBox(height: 16),
+//
+//                 // Form Fields Row 2
+//                 Row(
+//                   children: [
+//                     Expanded(
+//                       child: _buildFormField("Menu category", controller.categoryController, "Select category"),
+//                     ),
+//                     const SizedBox(width: 16),
+//                     const Expanded(child: SizedBox()), // Spacer
+//                   ],
+//                 ),
+//                 const SizedBox(height: 16),
+//
+//                 _buildFormField("Description", controller.descriptionController, "Enter description", maxLines: 3),
+//
+//                 const SizedBox(height: 24),
+//                 const Text("Add Item", style: TextStyle(fontWeight: FontWeight.bold)),
+//                 const SizedBox(height: 8),
+//
+//                 // Search Field for Items
+//                 TextField(
+//                   controller: controller.searchController,
+//                   onChanged: (val) => controller.searchProducts(val),
+//                   decoration: InputDecoration(
+//                     hintText: "Search items",
+//                     prefixIcon: const Icon(Icons.search),
+//                     filled: true,
+//                     fillColor: Colors.grey[50],
+//                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+//                   ),
+//                 ),
+//
+//                 // Search Results list
+//                 Obx(() {
+//                   if (controller.searchResults.isEmpty) return const SizedBox();
+//                   return Container(
+//                     height: 200,
+//                     margin: const EdgeInsets.only(top: 8),
+//                     decoration: BoxDecoration(
+//                       color: Colors.white,
+//                       borderRadius: BorderRadius.circular(8),
+//                       boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+//                     ),
+//                     child: ListView.builder(
+//                       itemCount: controller.searchResults.length,
+//                       itemBuilder: (context, index) {
+//                         final product = controller.searchResults[index];
+//                         return ListTile(
+//                           title: Text(product['name']),
+//                           onTap: () => controller.addProductToMenu(product),
+//                           trailing: const Icon(Icons.add, color: Color(0xFF00B14F)),
+//                         );
+//                       },
+//                     ),
+//                   );
+//                 }),
+//
+//                 const SizedBox(height: 16),
+//                 const Text("Item List", style: TextStyle(fontWeight: FontWeight.bold)),
+//                 const SizedBox(height: 8),
+//
+//                 // Selected Items list
+//                 Obx(() => Container(
+//                   width: double.infinity,
+//                   padding: const EdgeInsets.all(12),
+//                   decoration: BoxDecoration(
+//                     color: Colors.grey[100],
+//                     borderRadius: BorderRadius.circular(8),
+//                   ),
+//                   child: controller.selectedProducts.isEmpty
+//                       ? const Text("Empty list", style: TextStyle(color: Colors.grey))
+//                       : Wrap(
+//                           spacing: 8,
+//                           runSpacing: 8,
+//                           children: controller.selectedProducts.map((p) => Chip(
+//                             backgroundColor: Colors.white,
+//                             label: Text(p['name']),
+//                             onDeleted: () => controller.removeProductFromMenu(p['id']),
+//                             deleteIconColor: Colors.red,
+//                           )).toList(),
+//                         ),
+//                 )),
+//
+//                 const SizedBox(height: 32),
+//                 SizedBox(
+//                   width: double.infinity,
+//                   child: ElevatedButton(
+//                     onPressed: () => controller.savePartyMenu(),
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: const Color(0xFF00B14F),
+//                       foregroundColor: Colors.white,
+//                       padding: const EdgeInsets.symmetric(vertical: 16),
+//                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+//                     ),
+//                     child: Obx(() => Text(
+//                       controller.isEditing.value ? "Update Menu" : "Save Menu",
+//                       style: const TextStyle(fontWeight: FontWeight.bold)
+//                     )),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Widget _buildFormField(String label, TextEditingController controller, String hint, {int maxLines = 1}) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+//         const SizedBox(height: 8),
+//         TextField(
+//           controller: controller,
+//           maxLines: maxLines,
+//           decoration: InputDecoration(
+//             hintText: hint,
+//             hintStyle: const TextStyle(fontSize: 13, color: Colors.grey),
+//             filled: true,
+//             fillColor: Colors.white,
+//             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: Colors.grey[300]!)),
+//             enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: Colors.grey[300]!)),
+//             contentPadding: const EdgeInsets.all(12),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+//
+//   Widget _buildPaginationButton(String label, VoidCallback onTap) {
+//     return OutlinedButton(
+//       onPressed: onTap,
+//       style: OutlinedButton.styleFrom(
+//         side: BorderSide(color: Color(0xFF00B14F)),
+//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+//         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+//       ),
+//       child: Text(
+//         label,
+//         style: const TextStyle(color: Color(0xFF00B14F), fontSize: 12),
+//       ),
+//     );
+//   }
+// }
+
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../home/controllers/home_controller.dart';
 import '../controllers/party_menu_controller.dart';
-
 
 class PartyMenuView extends GetView<PartyMenuController> {
   const PartyMenuView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final isMobile = screenWidth < 600;
+    final isTablet = screenWidth >= 600 && screenWidth < 900;
+    final isDesktop = screenWidth >= 900;
+
+    final horizontalPadding = isMobile ? 16.0 : 24.0;
+    final verticalPadding = isMobile ? 16.0 : 24.0;
+
     if (!Get.isRegistered<PartyMenuController>()) {
       Get.put(PartyMenuController());
     }
@@ -16,69 +455,19 @@ class PartyMenuView extends GetView<PartyMenuController> {
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9F9),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.symmetric(
+          horizontal: horizontalPadding,
+          vertical: verticalPadding,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header with User Info
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(), // Spacer
-                Row(
-                  children: [
-                    const Icon(Icons.notifications_none, color: Colors.black54),
-                    const SizedBox(width: 16),
-                    CircleAvatar(
-                      radius: 18,
-                      backgroundColor: Colors.grey[200],
-                      child: const Icon(Icons.person, color: Colors.grey),
-                    ),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Obx(() => Text(
-                          Get.find<HomeController>().adminName.value,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                        )),
-                        Obx(() => Text(
-                          Get.find<HomeController>().adminRole.value,
-                          style: const TextStyle(color: Colors.grey, fontSize: 11),
-                        )),
-                      ],
-                    ),
-                    const Icon(Icons.keyboard_arrow_down, size: 20),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
+            _buildHeader(context, isMobile),
+            const SizedBox(height: 24),
 
             // Title and Add Button
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Menu Management",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    controller.clearForm();
-                    _showMenuForm(context);
-                  },
-                  icon: const Icon(Icons.add, size: 18),
-                  label: const Text("Add New Menu", style: TextStyle(fontSize: 13)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00B14F),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  ),
-                ),
-              ],
-            ),
+            _buildTitleAndAddButton(context, isMobile, isTablet, isDesktop),
             const SizedBox(height: 24),
 
             // Grid of Party Menus and Pagination
@@ -93,34 +482,23 @@ class PartyMenuView extends GetView<PartyMenuController> {
                 return CustomScrollView(
                   slivers: [
                     SliverGrid(
-                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 400,
-                        crossAxisSpacing: 20,
-                        mainAxisSpacing: 20,
-                        childAspectRatio: 0.82,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: isMobile ? 1 : (isTablet ? 2 : 3),
+                        crossAxisSpacing: isMobile ? 12 : 20,
+                        mainAxisSpacing: isMobile ? 12 : 20,
+                        childAspectRatio: isMobile ? 0.9 : (isTablet ? 0.85 : 0.82),
                       ),
                       delegate: SliverChildBuilderDelegate(
-                        (context, index) {
+                            (context, index) {
                           final menu = controller.partyMenus[index];
-                          return _buildMenuCard(menu,context);
+                          return _buildMenuCard(menu, context, isMobile);
                         },
                         childCount: controller.partyMenus.length,
                       ),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 32)),
                     SliverToBoxAdapter(
-                      child: Obx(() => Row(
-                        children: [
-                          Text(
-                            "Showing ${(controller.currentPage.value - 1) * controller.pageSize + 1} to ${(controller.currentPage.value * controller.pageSize).clamp(0, controller.totalItems.value)} of ${controller.totalItems.value} results",
-                            style: const TextStyle(color: Colors.grey, fontSize: 13),
-                          ),
-                          const Spacer(),
-                          _buildPaginationButton("Previous", () => controller.previousPage()),
-                          const SizedBox(width: 12),
-                          _buildPaginationButton("Next", () => controller.nextPage()),
-                        ],
-                      )),
+                      child: _buildPaginationFooter(context, isMobile),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 24)),
                   ],
@@ -133,7 +511,78 @@ class PartyMenuView extends GetView<PartyMenuController> {
     );
   }
 
-  Widget _buildMenuCard(Map<String, dynamic> menu,BuildContext context) {
+  Widget _buildHeader(BuildContext context, bool isMobile) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const SizedBox(), // Spacer
+        Row(
+          children: [
+            const Icon(Icons.notifications_none, color: Colors.black54),
+            const SizedBox(width: 16),
+            CircleAvatar(
+              radius: isMobile ? 16 : 18,
+              backgroundColor: Colors.grey[200],
+              child: Icon(Icons.person, color: Colors.grey, size: isMobile ? 16 : 20),
+            ),
+            const SizedBox(width: 8),
+            if (!isMobile) // Hide on mobile to save space
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Obx(() => Text(
+                    Get.find<HomeController>().adminName.value,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  )),
+                  Obx(() => Text(
+                    Get.find<HomeController>().adminRole.value,
+                    style: const TextStyle(color: Colors.grey, fontSize: 11),
+                  )),
+                ],
+              ),
+            if (!isMobile) const Icon(Icons.keyboard_arrow_down, size: 20),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTitleAndAddButton(BuildContext context, bool isMobile, bool isTablet, bool isDesktop) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Menu Management",
+          style: TextStyle(
+            fontSize: isMobile ? 18 : (isTablet ? 22 : 24),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        ElevatedButton.icon(
+          onPressed: () {
+            controller.clearForm();
+            _showMenuForm(context, isMobile, isTablet, isDesktop);
+          },
+          icon: Icon(Icons.add, size: isMobile ? 16 : 18),
+          label: Text(
+            isMobile ? "Add" : "Add New Menu",
+            style: TextStyle(fontSize: isMobile ? 12 : 13),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF00B14F),
+            foregroundColor: Colors.white,
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 12 : 20,
+              vertical: isMobile ? 8 : 12,
+            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMenuCard(Map<String, dynamic> menu, BuildContext context, bool isMobile) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -146,55 +595,86 @@ class PartyMenuView extends GetView<PartyMenuController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Image
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: menu['image_url'] != null && menu['image_url'].toString().isNotEmpty
-                ? Image.network(menu['image_url'], height: 220, width: double.infinity, fit: BoxFit.cover)
-                : Container(height: 220, color: Colors.grey[200], child: const Icon(Icons.image, color: Colors.grey)),
+          Expanded(
+            flex: isMobile ? 5 : 6,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              child: menu['image_url'] != null && menu['image_url'].toString().isNotEmpty
+                  ? Image.network(
+                menu['image_url'],
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Container(
+                  color: Colors.grey[200],
+                  child: const Icon(Icons.image, color: Colors.grey),
+                ),
+              )
+                  : Container(color: Colors.grey[200], child: const Icon(Icons.image, color: Colors.grey)),
+            ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  menu['title'],
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  menu['title'] ?? 'Untitled',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: isMobile ? 14 : 15,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: isMobile ? 4 : 8),
                 Text(
                   menu['description'] ?? "No description",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: isMobile ? 11 : 12,
+                  ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: isMobile ? 12 : 16),
                 Row(
                   children: [
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () {
                           controller.populateForm(menu);
-                          _showMenuForm(context);
+                          _showMenuForm(context, false, false, false);
                         },
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(color: Color(0xFF00B14F)),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          padding: EdgeInsets.symmetric(vertical: isMobile ? 8 : 12),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
-                        child: const Text("Edit", style: TextStyle(color: Color(0xFF00B14F), fontSize: 13)),
+                        child: Text(
+                          "Edit",
+                          style: TextStyle(
+                            color: const Color(0xFF00B14F),
+                            fontSize: isMobile ? 11 : 13,
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: isMobile ? 4 : 8),
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () => controller.deletePartyMenu(menu['id']),
+                        onPressed: () => _showDeleteConfirm(menu['id']),
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(color: Colors.red),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          padding: EdgeInsets.symmetric(vertical: isMobile ? 8 : 12),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
-                        child: const Text("Delete", style: TextStyle(color: Colors.red, fontSize: 13)),
+                        child: Text(
+                          "Delete",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: isMobile ? 11 : 13,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -207,36 +687,105 @@ class PartyMenuView extends GetView<PartyMenuController> {
     );
   }
 
-  void _showMenuForm(BuildContext context) {
+  Widget _buildPaginationFooter(BuildContext context, bool isMobile) {
+    return Row(
+      children: [
+        Obx(() {
+          final start = ((controller.currentPage.value - 1) * controller.pageSize) + 1;
+          final end = (start + controller.partyMenus.length - 1).clamp(0, controller.totalItems.value);
+          return Text(
+            isMobile
+                ? "$start-$end of ${controller.totalItems.value}"
+                : "Showing $start to $end of ${controller.totalItems.value} results",
+            style: const TextStyle(color: Colors.grey, fontSize: 13),
+          );
+        }),
+        const Spacer(),
+        _buildPaginationButton("Previous", () => controller.previousPage(), isMobile),
+        SizedBox(width: isMobile ? 8 : 12),
+        _buildPaginationButton("Next", () => controller.nextPage(), isMobile),
+      ],
+    );
+  }
+
+  Widget _buildPaginationButton(String label, VoidCallback onTap, bool isMobile) {
+    return OutlinedButton(
+      onPressed: onTap,
+      style: OutlinedButton.styleFrom(
+        side: const BorderSide(color: Color(0xFF00B14F)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 12 : 16,
+          vertical: isMobile ? 8 : 12,
+        ),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(color: Color(0xFF00B14F), fontSize: 12),
+      ),
+    );
+  }
+
+  void _showDeleteConfirm(int id) {
+    Get.defaultDialog(
+      title: "Delete Product?",
+      middleText: "Are you sure you want to remove this item?",
+      textConfirm: "Delete",
+      textCancel: "Cancel",
+      confirmTextColor: Colors.white,
+      buttonColor: const Color(0xFFFF5656),
+      onConfirm: () {
+        Get.back();
+        controller.deletePartyMenu(id);
+      },
+    );
+  }
+
+  void _showMenuForm(BuildContext context, bool isMobile, bool isTablet, bool isDesktop) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     Get.dialog(
       Dialog(
         backgroundColor: Colors.white,
-        insetPadding: const EdgeInsets.all(40),
+        insetPadding: EdgeInsets.all(isMobile ? 16 : 40),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Container(
-          width: 800,
-          padding: const EdgeInsets.all(32),
+          width: isMobile ? screenWidth * 0.95 : (isTablet ? 600 : 800),
+          constraints: BoxConstraints(
+            maxHeight: screenHeight * 0.9,
+          ),
+          padding: EdgeInsets.all(isMobile ? 16 : 32),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Obx(() => Text(
-                      controller.isEditing.value ? "Update Party Menu" : "Add New Menu", 
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                      controller.isEditing.value ? "Update Party Menu" : "Add New Menu",
+                      style: TextStyle(
+                          fontSize: isMobile ? 18 : 20,
+                          fontWeight: FontWeight.bold
+                      ),
                     )),
-                    IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.close)),
+                    IconButton(
+                      onPressed: () => Get.back(),
+                      icon: const Icon(Icons.close),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
                   ],
                 ),
-                const SizedBox(height: 24),
-                
+                SizedBox(height: isMobile ? 16 : 24),
+
                 // Image Placeholder/Upload
                 Obx(() => GestureDetector(
                   onTap: () => controller.pickAndUploadImage(),
                   child: Container(
-                    height: 200,
+                    height: isMobile ? 150 : 200,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
@@ -244,79 +793,106 @@ class PartyMenuView extends GetView<PartyMenuController> {
                       border: Border.all(color: Colors.grey[300]!, width: 1),
                       image: controller.selectedImageUrl.value.isNotEmpty
                           ? DecorationImage(
-                              image: NetworkImage(controller.selectedImageUrl.value),
-                              fit: BoxFit.cover,
-                            )
+                        image: NetworkImage(controller.selectedImageUrl.value),
+                        fit: BoxFit.cover,
+                      )
                           : null,
                     ),
                     child: controller.isUploading.value
                         ? const Center(child: CircularProgressIndicator(color: Color(0xFF00B14F)))
                         : controller.selectedImageUrl.value.isEmpty
-                            ? const Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.image_outlined, size: 48, color: Colors.grey),
-                                    SizedBox(height: 8),
-                                    Text("Add Photos", style: TextStyle(color: Colors.grey)),
-                                  ],
-                                ),
-                              )
-                            : null,
+                        ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.image_outlined, size: isMobile ? 32 : 48, color: Colors.grey),
+                          SizedBox(height: isMobile ? 4 : 8),
+                          Text(
+                            "Add Photos",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: isMobile ? 12 : 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                        : null,
                   ),
                 )),
-                const SizedBox(height: 24),
+                SizedBox(height: isMobile ? 16 : 24),
 
-                // Form Fields Row 1
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildFormField("Title", controller.titleController, "Enter title"),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: _buildFormField("Price", controller.priceController, "Enter price"),
-                    ),
-                  ],
+                // Form Fields
+                if (isMobile) ...[
+                  _buildFormField("Title", controller.titleController, "Enter title", isMobile),
+                  SizedBox(height: 12),
+                  _buildFormField("Price", controller.priceController, "Enter price", isMobile),
+                  SizedBox(height: 12),
+                  _buildFormField("Menu category", controller.categoryController, "Select category", isMobile),
+                  SizedBox(height: 12),
+                  _buildFormField("Description", controller.descriptionController, "Enter description", isMobile, maxLines: 3),
+                ] else ...[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildFormField("Title", controller.titleController, "Enter title", isMobile),
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: _buildFormField("Price", controller.priceController, "Enter price", isMobile),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildFormField("Menu category", controller.categoryController, "Select category", isMobile),
+                      ),
+                      SizedBox(width: 16),
+                      const Expanded(child: SizedBox()),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  _buildFormField("Description", controller.descriptionController, "Enter description", isMobile, maxLines: 3),
+                ],
+
+                SizedBox(height: isMobile ? 16 : 24),
+                Text(
+                  "Add Item",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: isMobile ? 14 : 16,
+                  ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: isMobile ? 8 : 8),
 
-                // Form Fields Row 2
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildFormField("Menu category", controller.categoryController, "Select category"),
-                    ),
-                    const SizedBox(width: 16),
-                    const Expanded(child: SizedBox()), // Spacer
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                _buildFormField("Description", controller.descriptionController, "Enter description", maxLines: 3),
-                
-                const SizedBox(height: 24),
-                const Text("Add Item", style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                
                 // Search Field for Items
                 TextField(
                   controller: controller.searchController,
                   onChanged: (val) => controller.searchProducts(val),
                   decoration: InputDecoration(
                     hintText: "Search items",
-                    prefixIcon: const Icon(Icons.search),
+                    hintStyle: TextStyle(fontSize: isMobile ? 13 : 14),
+                    prefixIcon: Icon(Icons.search, size: isMobile ? 18 : 20),
                     filled: true,
                     fillColor: Colors.grey[50],
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: isMobile ? 12 : 16,
+                      vertical: isMobile ? 12 : 16,
+                    ),
                   ),
                 ),
-                
+
                 // Search Results list
                 Obx(() {
                   if (controller.searchResults.isEmpty) return const SizedBox();
                   return Container(
-                    height: 200,
+                    height: isMobile ? 150 : 200,
                     margin: const EdgeInsets.only(top: 8),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -328,42 +904,71 @@ class PartyMenuView extends GetView<PartyMenuController> {
                       itemBuilder: (context, index) {
                         final product = controller.searchResults[index];
                         return ListTile(
-                          title: Text(product['name']),
+                          dense: isMobile,
+                          title: Text(
+                            product['name'],
+                            style: TextStyle(fontSize: isMobile ? 13 : 14),
+                          ),
                           onTap: () => controller.addProductToMenu(product),
-                          trailing: const Icon(Icons.add, color: Color(0xFF00B14F)),
+                          trailing: Icon(
+                            Icons.add,
+                            color: const Color(0xFF00B14F),
+                            size: isMobile ? 18 : 24,
+                          ),
                         );
                       },
                     ),
                   );
                 }),
 
-                const SizedBox(height: 16),
-                const Text("Item List", style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                
+                SizedBox(height: isMobile ? 12 : 16),
+                Text(
+                  "Item List",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: isMobile ? 14 : 16,
+                  ),
+                ),
+                SizedBox(height: isMobile ? 8 : 8),
+
                 // Selected Items list
                 Obx(() => Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(isMobile ? 8 : 12),
                   decoration: BoxDecoration(
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: controller.selectedProducts.isEmpty
-                      ? const Text("Empty list", style: TextStyle(color: Colors.grey))
+                      ? Text(
+                    "Empty list",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: isMobile ? 13 : 14,
+                    ),
+                  )
                       : Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: controller.selectedProducts.map((p) => Chip(
-                            backgroundColor: Colors.white,
-                            label: Text(p['name']),
-                            onDeleted: () => controller.removeProductFromMenu(p['id']),
-                            deleteIconColor: Colors.red,
-                          )).toList(),
-                        ),
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: controller.selectedProducts.map((p) => Chip(
+                      backgroundColor: Colors.white,
+                      label: Text(
+                        p['name'],
+                        style: TextStyle(fontSize: isMobile ? 11 : 12),
+                      ),
+                      onDeleted: () => controller.removeProductFromMenu(p['id']),
+                      deleteIconColor: Colors.red,
+                      deleteIcon: Icon(Icons.close, size: isMobile ? 16 : 18),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 4 : 8,
+                        vertical: 0,
+                      ),
+                    )).toList(),
+                  ),
                 )),
 
-                const SizedBox(height: 32),
+                SizedBox(height: isMobile ? 20 : 32),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -371,12 +976,15 @@ class PartyMenuView extends GetView<PartyMenuController> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF00B14F),
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: EdgeInsets.symmetric(vertical: isMobile ? 12 : 16),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                     child: Obx(() => Text(
-                      controller.isEditing.value ? "Update Menu" : "Save Menu", 
-                      style: const TextStyle(fontWeight: FontWeight.bold)
+                      controller.isEditing.value ? "Update Menu" : "Save Menu",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: isMobile ? 14 : 16,
+                      ),
                     )),
                   ),
                 ),
@@ -388,41 +996,48 @@ class PartyMenuView extends GetView<PartyMenuController> {
     );
   }
 
-  Widget _buildFormField(String label, TextEditingController controller, String hint, {int maxLines = 1}) {
+  Widget _buildFormField(
+      String label,
+      TextEditingController controller,
+      String hint,
+      bool isMobile, {
+        int maxLines = 1,
+      }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-        const SizedBox(height: 8),
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: isMobile ? 12 : 13,
+          ),
+        ),
+        SizedBox(height: isMobile ? 4 : 8),
         TextField(
           controller: controller,
           maxLines: maxLines,
+          style: TextStyle(fontSize: isMobile ? 14 : 15),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(fontSize: 13, color: Colors.grey),
+            hintStyle: TextStyle(
+              fontSize: isMobile ? 13 : 14,
+              color: Colors.grey,
+            ),
             filled: true,
             fillColor: Colors.white,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: Colors.grey[300]!)),
-            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: Colors.grey[300]!)),
-            contentPadding: const EdgeInsets.all(12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey[300]!),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey[300]!),
+            ),
+            contentPadding: EdgeInsets.all(isMobile ? 10 : 12),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildPaginationButton(String label, VoidCallback onTap) {
-    return OutlinedButton(
-      onPressed: onTap,
-      style: OutlinedButton.styleFrom(
-        side: BorderSide(color: Color(0xFF00B14F)),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(color: Color(0xFF00B14F), fontSize: 12),
-      ),
     );
   }
 }
