@@ -8,6 +8,7 @@ class HomeController extends GetxController {
   var selectedProduct = Rxn<dynamic>();
   var adminName = "Admin".obs;
   var adminRole = "Admin".obs;
+  var adminProfileImg = "".obs;
 
   // Dashboard Stats
   var period = "week".obs;
@@ -20,6 +21,7 @@ class HomeController extends GetxController {
   var isLoadingStats = false.obs;
   var statsError = "".obs;
 
+
   final DashboardProvider _dashboardProvider = DashboardProvider();
 
   @override
@@ -28,6 +30,7 @@ class HomeController extends GetxController {
     final storage = GetStorage();
     adminName.value = storage.read('admin_name') ?? "Admin User";
     adminRole.value = storage.read('admin_role') ?? "Admin";
+    adminProfileImg.value = storage.read('admin_profile_img') ?? "";
 
     // Fetch stats on init
     fetchDashboardStats();

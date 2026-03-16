@@ -518,13 +518,16 @@ class PartyMenuView extends GetView<PartyMenuController> {
         const SizedBox(), // Spacer
         Row(
           children: [
-            const Icon(Icons.notifications_none, color: Colors.black54),
             const SizedBox(width: 16),
-            CircleAvatar(
-              radius: isMobile ? 16 : 18,
-              backgroundColor: Colors.grey[200],
-              child: Icon(Icons.person, color: Colors.grey, size: isMobile ? 16 : 20),
-            ),
+            Obx(() {
+              final profileImg = Get.find<HomeController>().adminProfileImg.value;
+              return CircleAvatar(
+                radius: isMobile ? 16 : 18,
+                backgroundColor: Colors.grey[200],
+                backgroundImage: profileImg.isNotEmpty ? NetworkImage(profileImg) : null,
+                child: profileImg.isEmpty ? Icon(Icons.person, color: Colors.grey, size: isMobile ? 16 : 20) : null,
+              );
+            }),
             const SizedBox(width: 8),
             if (!isMobile) // Hide on mobile to save space
               Column(
@@ -540,7 +543,6 @@ class PartyMenuView extends GetView<PartyMenuController> {
                   )),
                 ],
               ),
-            if (!isMobile) const Icon(Icons.keyboard_arrow_down, size: 20),
           ],
         ),
       ],

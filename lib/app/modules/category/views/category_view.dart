@@ -24,7 +24,6 @@ class CategoryView extends GetView<CategoryController> {
               ),
               Row(
                 children: [
-                  const Icon(Icons.notifications_none, color: Colors.black54),
                   const SizedBox(width: 16),
                   CircleAvatar(
                     radius: 18,
@@ -39,7 +38,6 @@ class CategoryView extends GetView<CategoryController> {
                       Obx(() => Text(Get.find<HomeController>().adminRole.value, style: const TextStyle(color: Colors.grey, fontSize: 11))),
                     ],
                   ),
-                  const Icon(Icons.keyboard_arrow_down, size: 20),
                 ],
               ),
             ],

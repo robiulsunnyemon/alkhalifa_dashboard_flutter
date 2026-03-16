@@ -37,6 +37,7 @@ class LoginController extends GetxController {
         await _storage.write('token', token);
         await _storage.write('admin_name', "${data['user']['first_name']} ${data['user']['last_name']}");
         await _storage.write('admin_role', data['user']['role']);
+        await _storage.write('admin_profile_img', data['user']['profile_img_url']);
         Get.offAllNamed('/home');
       } else {
         final error = jsonDecode(response.body);

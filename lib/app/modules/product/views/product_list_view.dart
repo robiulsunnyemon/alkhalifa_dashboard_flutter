@@ -307,21 +307,22 @@ class ProductListView extends GetView<ProductListController> {
                 const SizedBox(), // Placeholder for flex
                 Row(
                   children: [
-                    Icon(
-                      Icons.notifications_none,
-                      color: Colors.black54,
-                      size: isMobile ? 20 : 24,
-                    ),
                     SizedBox(width: isMobile ? 12 : 16),
-                    CircleAvatar(
-                      radius: isMobile ? 16 : 18,
-                      backgroundColor: Colors.grey[200],
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.grey,
-                        size: isMobile ? 16 : 20,
-                      ),
-                    ),
+                    Obx(() {
+                      final profileImg = Get.find<HomeController>().adminProfileImg.value;
+                      return CircleAvatar(
+                        radius: isMobile ? 16 : 18,
+                        backgroundColor: Colors.grey[200],
+                        backgroundImage: profileImg.isNotEmpty ? NetworkImage(profileImg) : null,
+                        child: profileImg.isEmpty
+                            ? Icon(
+                                Icons.person,
+                                color: Colors.grey,
+                                size: isMobile ? 16 : 20,
+                              )
+                            : null,
+                      );
+                    }),
                     if (!isMobile) ...[
                       SizedBox(width: 8),
                       Column(
@@ -343,7 +344,6 @@ class ProductListView extends GetView<ProductListController> {
                           )),
                         ],
                       ),
-                      const Icon(Icons.keyboard_arrow_down, size: 20),
                     ],
                   ],
                 ),
