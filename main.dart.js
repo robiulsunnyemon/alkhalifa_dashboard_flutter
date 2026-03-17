@@ -51610,7 +51610,7 @@ A.a8P.prototype={
 $0(){return B.AW},
 $S:419}
 A.SD.prototype={
-L(a){return new A.Dc("/login","Application",!1,$.aYa(),null)}}
+L(a){return new A.Dc("/login","AL-Khalifa Restaurant & Convention Hall",!1,$.aYa(),null)}}
 A.fB.prototype={
 gaj(a){return new A.GI(this.a,0,0)},
 ga4(a){var s=this.a,r=s.length
