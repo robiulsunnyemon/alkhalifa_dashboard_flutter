@@ -1,11 +1,11 @@
 {
-    "name": "akflutterdashboard",
-    "short_name": "akflutterdashboard",
+    "name": "AL-Khalifa Restaurant & Convention Hall",
+    "short_name": "AL-Khalifa Restaurant & Convention Hall",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "AL-Khalifa Restaurant & Convention Hall",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
