@@ -1,7 +1,8 @@
 class ApiConstants {
   // static const String baseUrl = "http://10.0.2.2:8000"; // For Android Emulator
-  static const String baseUrl = "https://akfoodapi.maktechlaravel.cloud"; // For Web/Desktop
-  
+  // static const String baseUrl = "https://akfoodapi.maktechlaravel.cloud"; // For Web/Desktop
+  static const String baseUrl = "https://www.magpie.maktechapp.cloud"; // For Web/Desktop
+
   static const String login = "$baseUrl/auth/login";
   static const String categories = "$baseUrl/categories/";
   static const String products = "$baseUrl/products/";
